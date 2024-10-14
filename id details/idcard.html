@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Form</title>
+    <link rel="stylesheet" type="text/css" href="id.css">
+    <style>
+        @media print {
+            body * {
+                visibility: hidden; /* Hide everything */
+            }
+            #preview, #preview * {
+                visibility: visible; /* Show only the preview */
+            }
+            #preview {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>ID Form</h2>
+        <form id="idForm" onsubmit="showPreview(event)">
+
+            <label for="profilePhoto">Profile Photo:</label>
+            <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" required onchange="previewImage(event)">
+
+            <!-- Image preview element -->
+            <img id="imagePreview" src="" alt="Image Preview" style="display:none;">
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="department">Department:</label>
+            <select id="department" name="department" required>
+                <option value="" disabled selected>Select Department</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Electrical Engineering">Electrical Engineering</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Civil Engineering">Civil Engineering</option>
+                <option value="Business Administration">Business Administration</option>
+            </select>
+
+            <label for="validityTo">Validity To:</label>
+            <div class="month-year">
+                <select id="month" name="month" required>
+                    <option value="" disabled selected>Month</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                <select id="year" name="year" required>
+                    <option value="" disabled selected>Year</option>
+                    <!-- Generate options for the current year to 5 years ahead -->
+                    <script>
+                        const currentYear = new Date().getFullYear();
+                        for (let i = 0; i <= 10; i++) {
+                            document.write(`<option value="${currentYear + i}">${currentYear + i}</option>`);
+                        }
+                    </script>
+                </select>
+            </div>
+
+            <label for="idno">ID Number:</label>
+            <input type="text" id="idno" name="idno" required>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="phone">Phone No:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <button type="submit">Preview ID Card</button>
+            
+        </form>
+    </div>
+
+    <div class="preview-container" id="preview" style="display: none;">
+        <div class="default-details">
+            <h3>NOORUL ISLAM COLLEGE OF ARTS & SCIENCE, KUMARACOIL,THUCKALAY-629180</h3>     
+            <h6>Landline: 04561 253766 & Ragging Helpline Number: 1800 180 5522 & 1077</h6>
+        </div>
+        
+        <img id="previewImage" src="" alt="Preview Image">
+        <p><strong>Name:</strong> <span id="previewName"></span></p>
+        <p><strong>Department:</strong> <span id="previewDepartment"></span></p>
+        <p><strong>Validity To:</strong> <span id="previewValidity"></span></p>
+        <p><strong>ID Number:</strong> <span id="previewIdNo"></span></p>
+        <p><strong>Date of Birth:</strong> <span id="previewDOB"></span></p>
+        <p><strong>Phone No:</strong> <span id="previewPhone"></span></p>
+        <button onclick="printID()" class="print-btn">Print ID</button>
+        <button onclick="hidePreview()" class="goback-btn">Go Back</button>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const imagePreview = document.getElementById('imagePreview');
+            const fileInput = document.getElementById('profilePhoto');
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block'; // Show the image
+                fileInput.classList.add('hidden'); // Hide the file input
+            };
+
+            if (file) {
+                reader.readAsDataURL(file); // Read the file as a data URL
+            }
+        }
+
+        function showPreview(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get values from the form
+            const name = document.getElementById('name').value;
+            const department = document.getElementById('department').value;
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+            const idno = document.getElementById('idno').value;
+            const dob = document.getElementById('dob').value;
+            const phone = document.getElementById('phone').value;
+            const imagePreview = document.getElementById('imagePreview').src;
+
+            // Set values in the preview section
+            document.getElementById('previewName').textContent = name;
+            document.getElementById('previewDepartment').textContent = department;
+            document.getElementById('previewValidity').textContent = `${month}/${year}`;
+            document.getElementById('previewIdNo').textContent = idno;
+            document.getElementById('previewDOB').textContent = dob;
+            document.getElementById('previewPhone').textContent = phone;
+            document.getElementById('previewImage').src = imagePreview;
+
+            // Show the preview container
+            document.getElementById('preview').style.display = 'block';
+        }
+
+        function hidePreview() {
+            document.getElementById('preview').style.display = 'none'; // Hide preview
+        }
+
+        function printID() {
+            // Hide the form container
+            document.querySelector('.form-container').style.display = 'none';
+            // Show only the preview container
+            document.getElementById('preview').style.display = 'block';
+
+            // Call the print function
+            window.print();
+
+            // After printing, restore the form visibility
+            document.querySelector('.form-container').style.display = 'block';
+            document.getElementById('preview').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

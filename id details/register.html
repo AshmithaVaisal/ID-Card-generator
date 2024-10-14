@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Form Design</title>
+    <link rel="stylesheet" type="text/css" href="register.css">
+</head>
+<body>
+
+    <div class="box">
+        
+
+        <h1>Registeration Form</h1>
+
+        <form name="myform2" onsubmit="redirectToIdForm(event)">
+            <p>Username</p>
+            <input type="text" name="uname1" placeholder="Enter Username" required>
+
+            <p>Email</p>
+            <input type="email" name="email" placeholder="Enter email id" required>
+
+            <p>Password</p>
+            <input type="password" name="upswd1" placeholder="Enter Password" required>
+
+            <p>Retype Password</p>
+            <input type="password" name="upswd2" placeholder="Re-Enter Password" required>
+
+            <input type="submit" value="Register">
+            <br><br>
+            <a href="index.html">Existing user? Login!</a>
+        </form>
+        
+    </div>
+    <script>
+        function redirectToIdForm(event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            // Redirect to the ID form page
+            window.location.href = "idcard.html";
+        }
+    </script>
+
+</body>
+</html>
